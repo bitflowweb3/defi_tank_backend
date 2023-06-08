@@ -1,6 +1,10 @@
 # backend template
 
 ### Install Dependencies
+node version
+```
+v16.14.2
+```
 
 ```bash
 yarn install
