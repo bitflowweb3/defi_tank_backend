@@ -1,4 +1,5 @@
-require("dotenv").config();
+import { config as dotenv } from 'dotenv';
+dotenv()
 
 export const config = {
   PORT: Number(process.env.PORT),
