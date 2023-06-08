@@ -7,4 +7,4 @@ export const config = {
   JWT_SECRET: process.env.JWT_SECRET,
   CHAINID: Number(process.env.CHAINID),
   DEBUG: process.env.DEBUG === 'true' ? true : false,
-}
+} 
