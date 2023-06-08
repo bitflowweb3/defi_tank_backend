@@ -1,6 +1,12 @@
 {
     "compilerOptions": {
-        "lib": ["es5", "es6", "es2017", "es2020", "dom"],
+        "lib": [
+            "es5",
+            "es6",
+            "es2017",
+            "es2020",
+            "dom"
+        ],
         "target": "es2020",
         "module": "commonjs",
         "moduleResolution": "node",
@@ -15,11 +21,19 @@
         "noImplicitAny": false,
         "downlevelIteration": true,
         "skipLibCheck": true,
-        "types": ["node"],
-        "typeRoots": ["./src/@types/*", "./node_modules/@types"]
+        "types": [
+            "node"
+        ],
+        "typeRoots": [
+            "./src/@types/*",
+            "./node_modules/@types"
+        ]
     },
     "ts-node": {
         "files": true
     },
-    "include": ["src/**/*","node_modules/@types/mocha"]
+    "include": [
+        "src/**/*",
+        "node_modules/@types/mocha"
+    ]
 }
