@@ -1,0 +1,5 @@
+PORT = 
+DEBUG = 
+CHAINID = 
+JWT_SECRET = 
+DATABASE = 
