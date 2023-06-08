@@ -8,9 +8,9 @@ import fileUpload from 'express-fileupload';
 
 // External Modules
 // import './subscribe/events'
+import { config } from './config';
 import { Routes } from "./Routes";
 import { setlog } from "./utils/setlog";
-import { config } from './config/config';
 // import { initHandler } from "./blockchain/api";
 // import { setupSocketServer } from "./socketServer";
 

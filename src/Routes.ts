@@ -1,11 +1,10 @@
 import express from "express";
-import Auth from "./auth";
+import User from "./user";
 
 const Routes = async (router: express.Router) => {
-
-	//user
-	router.post("/signup/register", Auth.controllers.signup);
-	router.post("/login", Auth.controllers.login);
+	//user auth apis
+	router.post("/auth/sinup", User.controllers.signup);
+	router.post("/auth/login", User.controllers.login);
 
 };
 
