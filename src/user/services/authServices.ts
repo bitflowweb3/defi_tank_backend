@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import { config } from "../../config";
-import { setlog } from "../../utils/setlog";
 
 interface CreateTokenParams {
   name: string

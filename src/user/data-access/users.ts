@@ -11,22 +11,39 @@ const makeUserDB = (UserModel: mongoose.Model<any>) => {
       return saveData;
     },
 
-    findOne: async ({ filter }: { filter: any }) => {
+    findOne: async ({ filter }: DataAccessParam) => {
       return UserModel.findOne(filter);
     },
 
-    find: async ({ filter }: { filter: any }) => {
+    find: async ({ filter }: DataAccessParam) => {
       return UserModel.find(filter);
     },
 
-    update: async ({ filter, update }: { filter: any, update: any }) => {
+    findRank: async ({ filter }: DataAccessParam) => {
+      try {
+        let tempRank = -1
+        let user = await UserModel.findOne(filter);
+
+        if (user) {
+          tempRank = await UserModel.count({
+            "merit": { "$gt": user.merit }
+          })
+        }
+
+        return tempRank
+      } catch (err) {
+        return -1
+      }
+    },
+
+    update: async ({ filter, update }: DataAccessParam) => {
       return UserModel.findOneAndUpdate(
         filter,
         update
       );
     },
 
-    remove: async ({ filter }: { filter: any }) => {
+    remove: async ({ filter }: DataAccessParam) => {
       const res: any = await UserModel.deleteOne(filter);
       return {
         found: res.n,

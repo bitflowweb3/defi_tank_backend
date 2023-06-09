@@ -66,6 +66,9 @@ const UserSchema = new Schema({
     type: String,
     default: ''
   },
+  referrallers: [{
+    type: String
+  }],
   referralReward: {
     type: Number,
     default: 0
@@ -80,7 +83,8 @@ const UserSchema = new Schema({
     default: 0
   },
   borrowTime: {
-    type: Number
+    type: Number,
+    default: 0,
   },
 
   lasttime: {

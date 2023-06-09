@@ -19,6 +19,7 @@ interface UserDataObject {
   role?: string
   merit?: number
   referrer?: string
+  referrallers?: [string]
   referralReward?: number
   followers?: string[]
 
