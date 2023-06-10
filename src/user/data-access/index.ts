@@ -4,7 +4,7 @@ import { makeUserDB } from "./users";
 const UserDB = makeUserDB(UserModels.Users);
 
 const userDatas = {
-    UserDB
+    UserDB,
 }
 
 export default userDatas;

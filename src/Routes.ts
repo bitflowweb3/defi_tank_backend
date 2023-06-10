@@ -1,5 +1,7 @@
 import express from "express";
+
 import User from "./user";
+import Platform from "./platform";
 
 const Routes = async (router: express.Router) => {
 	//user auth apis
@@ -16,7 +18,9 @@ const Routes = async (router: express.Router) => {
 	router.post("/user/like", User.controllers.like);
 	router.post("/user/claim-reward", User.controllers.claimReward);
 
-
+	// notification apis
+	router.post("/user/get-alert", Platform.controllers.getAlert);
+	router.post("/auth/read-alert", Platform.controllers.readAlert);
 };
 
 export { Routes };

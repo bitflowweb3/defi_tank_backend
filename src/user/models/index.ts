@@ -1,7 +1,7 @@
 import { Users } from "./users";
 
 const UserModels = {
-	Users
+	Users,
 }
 
 export default UserModels;

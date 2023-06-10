@@ -1,6 +1,7 @@
 import ipfsAPI from "ipfs-api"
+import { ethers } from "ethers";
 import { v4 as uuidv4 } from 'uuid';
-import { Response, Request, NextFunction } from "express";
+import { Response, Request } from "express";
 
 import { config } from "../../config";
 import { getHash } from "../../utils";
@@ -9,7 +10,7 @@ import { toChecksumAddress } from "../../utils/blockchain";
 import AuthController from "./auth";
 import userService from "../services";
 import userDatas from "../data-access";
-import { ethers } from "ethers";
+import platformDatas from "../../platform/data-access";
 
 const ipfs = ipfsAPI(
 	config.ipfs.host,
@@ -336,12 +337,12 @@ const userController = {
 				filter: { address: address }
 			})
 
-			// const result = await ReferralController.create({
-			// 	user: user,
-			// 	amount: user.referralReward
-			// })
+			const result = await platformDatas.ReferRewardDB.create({
+				user: user,
+				amount: user.referralReward
+			})
 
-			// return res.json(result);
+			return res.json(result);
 		} catch (err) {
 			console.log("Auth/claimReward : ", err.message);
 			res.status(500).json({ error: err.message });
