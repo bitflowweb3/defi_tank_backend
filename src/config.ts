@@ -8,6 +8,7 @@ export const config = {
   CHAINID: Number(process.env.CHAINID),
   DEBUG: process.env.DEBUG === 'true' ? true : false,
 
+  startDate: '2023-02-13',
   ADMINWALLET: process.env.ADMINWALLET,
 
   ipfs: {

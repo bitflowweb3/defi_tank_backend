@@ -348,6 +348,39 @@ const userController = {
 			res.status(500).json({ error: err.message });
 		}
 	},
+
+	getUsersCount: async (req: any, res: Response) => {
+		try {
+			const result = await userDatas.UserDB.find({
+				filter: {}
+			})
+
+			return res.json({ data: result.length });
+		} catch (err) {
+			console.log("Auth/getUserCount : ", err.message);
+			res.status(500).json({ error: err.message });
+		}
+	},
+
+	getOnlineGamersCount: async (req: any, res: Response) => {
+		try {
+			// console.log(global.users, Object.keys(global.users).length);
+			return res.json({ data: global.onlineUsers });
+		} catch (err) {
+			console.log("Auth/getUserCount : ", err.message);
+			res.status(500).json({ error: err.message });
+		}
+	},
+
+	getOnlineConnectCount: async (req: any, res: Response) => {
+		try {
+			// console.log(global.users, Object.keys(global.users).length);
+			return res.json({ data: global.connectedUsers });
+		} catch (err) {
+			console.log("Auth/getUserCount : ", err.message);
+			res.status(500).json({ error: err.message });
+		}
+	},
 }
 
 export default userController;

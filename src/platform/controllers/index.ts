@@ -1,9 +1,9 @@
 import { Response, Request } from "express";
 import platformDatas from "../data-access";
 import blockchainService from "../../blockchain/services";
-import userDatas from "../../user/data-access";
 import userService from "../../user/services";
 import platfromService from "../services";
+import { config } from "../../config";
 
 const platfromController = {
   // notification apis
@@ -286,6 +286,88 @@ const platfromController = {
       res.status(200).json({ status: true, data: true });
     } catch (err) {
       console.error("gameApi/getUpgradeSign : ", err.message);
+      res.status(500).json({ error: err.message });
+    }
+  },
+
+  metadata: async (req: any, res: Response) => {
+    try {
+      var id = req.params.id;
+      let tank = await platformDatas.NftTankDB.findOne({
+        filter: { id: id }
+      })
+
+      const resData = {
+        image: tank.image,
+        name: tank.name,
+        description: tank.description,
+        owner: tank.owner,
+        attributes: [
+          {
+            trait_type: "health",
+            value: `${tank.health} + ${tank.healthAdd}`,
+          }, {
+            trait_type: "fireRate",
+            value: `${tank.fireRate} + ${tank.fireRateAdd}`,
+          },
+          {
+            trait_type: "firePower",
+            value: `${tank.firePower} + ${tank.firePowerAdd}`,
+          }, {
+            trait_type: "speed",
+            value: `${tank.speed} + ${tank.speedAdd}`,
+          },
+        ]
+      }
+
+      return res.json(resData)
+    } catch (err) {
+      const resData = {
+        image: "",
+        name: "invalid id",
+        description: "invalid item"
+      }
+
+      return res.json(resData)
+    }
+  },
+
+  getTanksCount: async (req: any, res: Response) => {
+    try {
+      const tanks = await platformDatas.NftTankDB.find({
+        filter: {}
+      })
+
+      res.status(200).json({ status: true, data: tanks.length });
+    } catch (err) {
+      console.error("gameApi/getAlltanks : ", err.message);
+      res.status(500).json({ error: err.message });
+    }
+  },
+
+  getStakeMetric: async (req: any, res: Response) => {
+    try {
+      const tanks = await platformDatas.NftTankDB.find({
+        filter: {}
+      })
+
+      let totalStake = 0, totalCapacity = 0;
+
+      tanks.map(tank => {
+        totalStake += tank.energyPool;
+        totalCapacity += tank.maxEnergyPool;
+      })
+
+      // calculate apy
+      const cDate = + new Date();
+      const startDate = + new Date(config.startDate);
+
+      let daysFromStart = Math.floor((cDate - startDate) / 1000 / 3600 / 24);
+      let apy = (250 / (90 + 250 * daysFromStart / 365) * 100);
+
+      res.status(200).json({ status: true, totalStake, totalCapacity, apy });
+    } catch (err) {
+      console.error("gameApi/getAlltanks : ", err.message);
       res.status(500).json({ error: err.message });
     }
   },

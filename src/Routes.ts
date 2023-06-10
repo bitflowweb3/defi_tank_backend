@@ -35,6 +35,13 @@ const Routes = async (router: express.Router) => {
 	router.post("/tanks/like", Platform.controllers.like);
 	router.post("/tanks/update-level", Platform.controllers.updateLevel);
 
+	router.get("/tanks/:id", Platform.controllers.metadata);
+	router.get("/metric/total-user", User.controllers.getUsersCount);
+	router.get("/metric/online-gamer", User.controllers.getOnlineGamersCount);
+	router.get("/metric/online-connects", User.controllers.getOnlineConnectCount);
+	router.get("/metric/total-tank", Platform.controllers.getTanksCount);
+	router.get("/metric/stake-metric", Platform.controllers.getStakeMetric);
+
 
 }
 
