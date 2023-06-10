@@ -6,12 +6,16 @@ import userDatas from '../data-access';
 import { Now, getHash } from '../../utils';
 import { setlog } from '../../utils/setlog';
 import { toChecksumAddress } from '../../utils/blockchain';
+import blockchainService from '../../blockchain/services';
 
 const AuthController = {
   signup: async (req: Request, res: Response) => {
     try {
-      const { name, email, address, password, sign, referralUser } = req.body;
+      const { name, email, password, sign, referralUser } = req.body;
       const referralCode = uuidv4()
+
+      const message = "welcome " + name
+      const address = await blockchainService.getAddrFromSig(message, sign)
 
       // service
       const existsMail = await userService.checkExistOfAccount({
@@ -22,10 +26,6 @@ const AuthController = {
         throw new Error(`${existsMail.param} is already exist!`);
       };
 
-      // service
-      if (!userService.verifySignature({ sig: sign, address: address })) {
-        throw new Error("invalid signature")
-      };
 
       const hashedPassword = getHash(name, password)
       const tempAddress = toChecksumAddress(address)

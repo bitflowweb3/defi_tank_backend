@@ -13,7 +13,7 @@ const blockchainService = {
   getAddrFromSig: async (message: any, signature: any) => {
     const address = await ethers.utils.verifyMessage(message, signature);
 
-    return address
+    return address.toUpperCase()
   },
 }
 

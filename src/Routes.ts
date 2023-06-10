@@ -41,8 +41,6 @@ const Routes = async (router: express.Router) => {
 	router.get("/metric/online-connects", User.controllers.getOnlineConnectCount);
 	router.get("/metric/total-tank", Platform.controllers.getTanksCount);
 	router.get("/metric/stake-metric", Platform.controllers.getStakeMetric);
-
-
 }
 
 export { Routes }

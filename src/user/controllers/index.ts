@@ -31,8 +31,11 @@ const userController = {
 	// User controller
 	updateUserData: async (req: any, res: Response) => {
 		try {
-			const { name, email, address, password } = req.body;
+			const { name, email, password } = req.body;
 			const { description, links, signature } = req.body;
+
+			const message = "welcome " + name
+			const address = await blockchainService.getAddrFromSig(message, signature)
 
 			const hashedPassword = getHash(name, password);
 			const tempAddress = toChecksumAddress(address);
