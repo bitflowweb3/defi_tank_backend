@@ -20,7 +20,22 @@ const Routes = async (router: express.Router) => {
 
 	// notification apis
 	router.post("/user/get-alert", Platform.controllers.getAlert);
-	router.post("/auth/read-alert", Platform.controllers.readAlert);
-};
+	router.post("/user/read-alert", Platform.controllers.readAlert);
 
-export { Routes };
+	// tanks apis
+	router.post("/tanks/classes", Platform.controllers.getTankClasses);
+	router.post("/tanks/all-tanks", Platform.controllers.getAlltanks);
+	router.post("/tanks/user-tanks", Platform.controllers.getUsertanks);
+	router.post("/tanks/get-tanks", Platform.controllers.getTanks);
+	router.post("/tanks/get-upgradesign", Platform.controllers.getUpgradeSign);
+	router.post("/tanks/update-name", Platform.controllers.updateName);
+
+	router.post("/tanks/borrow", Platform.controllers.borrow);
+	router.post("/tanks/lend", Platform.controllers.lend);
+	router.post("/tanks/like", Platform.controllers.like);
+	router.post("/tanks/update-level", Platform.controllers.updateLevel);
+
+
+}
+
+export { Routes }

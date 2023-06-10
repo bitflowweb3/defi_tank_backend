@@ -1,5 +1,4 @@
 import ipfsAPI from "ipfs-api"
-import { ethers } from "ethers";
 import { v4 as uuidv4 } from 'uuid';
 import { Response, Request } from "express";
 
@@ -11,6 +10,7 @@ import AuthController from "./auth";
 import userService from "../services";
 import userDatas from "../data-access";
 import platformDatas from "../../platform/data-access";
+import blockchainService from "../../blockchain/services";
 
 const ipfs = ipfsAPI(
 	config.ipfs.host,
@@ -295,7 +295,7 @@ const userController = {
 	like: async (req: any, res: Response) => {
 		try {
 			const { to, signature } = req.body;
-			const address = await ethers.utils.verifyMessage(to, signature);
+			const address = await blockchainService.getAddrFromSig(to, signature)
 
 			let user = await userDatas.UserDB.findOne({
 				filter: { address: to }

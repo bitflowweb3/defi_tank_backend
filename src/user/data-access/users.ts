@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { getUTCTime } from "../../utils";
 
 const makeUserDB = (UserModel: mongoose.Model<any>) => {
   return {
@@ -49,7 +50,7 @@ const makeUserDB = (UserModel: mongoose.Model<any>) => {
         found: res.n,
         deleted: res.deletedCount
       };
-    }
+    },
   }
 }
 

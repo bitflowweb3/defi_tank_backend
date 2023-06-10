@@ -8,6 +8,8 @@ export const config = {
   CHAINID: Number(process.env.CHAINID),
   DEBUG: process.env.DEBUG === 'true' ? true : false,
 
+  ADMINWALLET: process.env.ADMINWALLET,
+
   ipfs: {
     baseUrl: process.env.PFS_BASEURL,
     host: process.env.IPFS_HOST,

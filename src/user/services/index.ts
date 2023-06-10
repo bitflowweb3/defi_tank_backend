@@ -131,6 +131,39 @@ const userService = {
 		} else {
 			throw new Error("updateBorrowTime: user data isn't exist")
 		}
+	},
+
+	newBorrow: async (address: string) => {
+		let user = await userDatas.UserDB.findOne({
+			filter: { address: address }
+		})
+
+		if (!user) {
+			throw new Error("user data isn't exist")
+		}
+
+
+		//get start time
+		let startDayTime = getUTCTime()
+		console.log(user.name, "want to borrow tank");
+
+		if (!user.borrowTime || user.borrowTime < startDayTime) {
+			user.borrowCount = 0;
+		}
+
+		if (user.borrowCount >= 5) {
+			throw new Error("You can only borrow 5 tanks per day")
+		}
+
+		await userDatas.UserDB.findOne({
+			filter: { address: address },
+			update: {
+				borrowCount: user.borrowCount + 1,
+				borrowTime: + new Date(),
+			}
+		})
+
+		return true;
 	}
 }
 

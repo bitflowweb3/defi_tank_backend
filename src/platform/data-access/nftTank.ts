@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import platfromService from "../services";
 
 const makeNftTankDB = (nftTankModel: mongoose.Model<any>) => {
   return {
@@ -19,6 +20,18 @@ const makeNftTankDB = (nftTankModel: mongoose.Model<any>) => {
       return nftTankModel.find(filter);
     },
 
+    getUpgradeSign: async ({ filter }: DataAccessParam) => {
+      const tank = await nftTankModel.findOne(filter);
+      const availableLevel = Math.floor(tank.tankLevel);
+
+      const signature = await platfromService.getUpdateSignature(
+        tank.id,
+        availableLevel
+      )
+
+      return { availableLevel, signature };
+    },
+
     update: async ({ filter, update }: DataAccessParam) => {
       return nftTankModel.findOneAndUpdate(
         filter,
@@ -32,7 +45,7 @@ const makeNftTankDB = (nftTankModel: mongoose.Model<any>) => {
         found: res.n,
         deleted: res.deletedCount
       };
-    }
+    },
   }
 }
 
