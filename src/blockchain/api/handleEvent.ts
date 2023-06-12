@@ -1,4 +1,3 @@
-import cron from "node-cron"
 import { ethers } from "ethers";
 
 import { fromBigNum } from "../../utils";

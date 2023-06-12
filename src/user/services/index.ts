@@ -1,7 +1,7 @@
 import userDatas from "../data-access";
+import { getUTCTime } from "../../utils";
 import AuthServices from "./authServices";
 import { recoverPersonalData } from "../../utils/blockchain";
-import { getUTCTime } from "../../utils";
 
 interface VerifySignParams {
 	sig: string

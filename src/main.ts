@@ -12,7 +12,7 @@ import { config } from './config';
 import { Routes } from "./Routes";
 import { setlog } from "./utils/setlog";
 import { initHandler } from "./blockchain/api";
-// import { setupSocketServer } from "./socketServer";
+import { setupSocketServer } from "./socketServer";
 
 // Get router
 const router: express.Router = express.Router();
@@ -82,7 +82,7 @@ connectDatabase(config.DATABASE).then(() => {
 	});
 
 	// // run socket server
-	// setupSocketServer(server)
+	setupSocketServer(server)
 }).catch((err: any) => {
 	setlog(err);
 });

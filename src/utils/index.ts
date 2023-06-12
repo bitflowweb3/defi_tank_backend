@@ -1,5 +1,5 @@
-import { ethers } from "ethers";
 import sha256 from "sha256"
+import { ethers } from "ethers";
 
 const Now = () => {
   return Math.round(new Date().getTime() / 1000)
@@ -31,6 +31,8 @@ const toBigNum = (value: number | string, d = 18) => {
 const fromBigNum = (value: number | string, d = 18): number => {
   return Number(ethers.utils.formatUnits(value, d))
 };
+
+
 
 export {
   Now,

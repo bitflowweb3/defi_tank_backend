@@ -47,14 +47,14 @@ export const handleEvent = async (props: blockEventObject) => {
 
     try {
       blockNumber = (await BlockNumController.findOne({
-        filter: { index: id }
+        filter: { id: id }
       })).latestBlock;
 
       if (!blockNumber) throw new Error("not find");
     } catch (err) {
       blockNumber = await provider.getBlockNumber();
       await BlockNumController.create({
-        index: id,
+        id: id,
         latestBlock: blockNumber,
       });
     }
