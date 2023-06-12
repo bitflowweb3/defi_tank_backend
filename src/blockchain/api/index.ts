@@ -1,6 +1,8 @@
 import baseClasses from "./json/classes.json"
-import platformDatas from "../../platform/data-access"
+
 import { dbUpdator } from "./dbUpdator"
+import { blockchainHandler } from "./handleEvent"
+import platformDatas from "../../platform/data-access"
 
 const initClasses = async () => {
   await platformDatas.ClassesDB.dropDB()
@@ -30,5 +32,6 @@ export const initHandler = async () => {
   // class init
   await initClasses();
 
+  blockchainHandler();
   dbUpdator();
 }

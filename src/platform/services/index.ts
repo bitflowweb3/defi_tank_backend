@@ -61,6 +61,30 @@ const platfromService = {
 
     return
   },
+
+  updateTankEnergy: async (tankID: string) => {
+    const tank = await platformDatas.NftTankDB.findOne({
+      filter: { id: tankID }
+    })
+
+    const now = Date.now();
+    const from = + new Date(tank.updatedAt);
+    const duration = (now - from) / 1000;
+    const chargedEnergy = duration * (tank.maxEnergy) / 24 / 3600; // duration * (energyPool + init recover power)*changeRate
+
+    let newEnergy = tank.energy + chargedEnergy;
+
+    if (newEnergy > tank.maxEnergy) {
+      newEnergy = tank.maxEnergy
+    }
+
+    await platformDatas.NftTankDB.update({
+      filter: { id: tank.id },
+      update: { energy: Math.round(newEnergy) }
+    })
+
+    return
+  }
 }
 
 export default platfromService

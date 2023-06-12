@@ -1,5 +1,5 @@
 interface blockEventObject {
-  id: number,
+  id: string,
   provider: JSONRPCProvider,
   contract: ethers.Contract,
   event: string,

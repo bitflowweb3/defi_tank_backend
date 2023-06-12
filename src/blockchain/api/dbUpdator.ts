@@ -6,6 +6,7 @@ import { RewardPool, TANKTOKEN } from "../contracts";
 
 import userDatas from "../../user/data-access";
 import platformDatas from "../../platform/data-access";
+import platfromService from "../../platform/services";
 
 const maxReward = 1500;
 const rewardRate = [5, 4, 3, 2, 1];
@@ -101,23 +102,9 @@ const energyUpdateHandler = () => {
 
     //update energy
     tanks.map((tank: NftTankObject) => {
-      const now = Date.now();
-      const from = + new Date(tank.updatedAt);
-      const duration = (now - from) / 1000;
-      const chargedEnergy = duration * (tank.maxEnergy) / 24 / 3600; // duration * (energyPool + init recover power)*changeRate
-
-      let newEnergy = tank.energy + chargedEnergy;
-
-      if (newEnergy > tank.maxEnergy) {
-        newEnergy = tank.maxEnergy
-      }
-
-      platformDatas.NftTankDB.update({
-        filter: { id: tank.id },
-        update: { energy: Math.round(newEnergy) }
-      })
+      platfromService.updateTankEnergy(tank.id)
     })
-  });
+  })
 }
 
 const referralRewardHandler = async () => {
@@ -134,7 +121,7 @@ const referralRewardHandler = async () => {
 
   const referRewardHandle = async () => {
     try {
-      console.log(`running a referralReward handler  every 30 second`);
+      // console.log(`running a referralReward handler  every 30 second`);
       const rewardUsers = await platformDatas.ReferRewardDB.find({
         filter: { status: "pending", tx: "" }
       })
