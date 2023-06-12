@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
+import { config } from "../../config";
 
-const supportChainId = 42161;
+const supportChainId = config.CHAINID;
 
 const RPCS = {
   250: "https://rpc.ftm.tools/",

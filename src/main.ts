@@ -11,7 +11,7 @@ import fileUpload from 'express-fileupload';
 import { config } from './config';
 import { Routes } from "./Routes";
 import { setlog } from "./utils/setlog";
-// import { initHandler } from "./blockchain/api";
+import { initHandler } from "./blockchain/api";
 // import { setupSocketServer } from "./socketServer";
 
 // Get router
@@ -74,8 +74,8 @@ Routes(router);
 app.use("/api", router);
 
 connectDatabase(config.DATABASE).then(() => {
-	// // run blockchain handler
-	// initHandler();
+	// run blockchain handler
+	initHandler();
 
 	const server = app.listen(config.PORT, () => {
 		setlog(`Server listening on ${config.PORT} port`);

@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import sha256 from "sha256"
 
 const Now = () => {
@@ -23,10 +24,21 @@ const delay = (ms: number) => {
   })
 }
 
+const toBigNum = (value: number | string, d = 18) => {
+  return ethers.utils.parseUnits(String(value), d)
+};
+
+const fromBigNum = (value: number | string, d = 18): number => {
+  return Number(ethers.utils.formatUnits(value, d))
+};
+
 export {
   Now,
   getUTCTime,
 
   getHash,
   delay,
+
+  toBigNum,
+  fromBigNum,
 }

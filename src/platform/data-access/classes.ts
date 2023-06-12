@@ -32,6 +32,10 @@ const makeClassesDB = (classesModel: mongoose.Model<any>) => {
         found: res.n,
         deleted: res.deletedCount
       };
+    },
+
+    dropDB: async () => {
+      return await classesModel.deleteMany({});
     }
   }
 }

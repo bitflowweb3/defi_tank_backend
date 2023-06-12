@@ -37,6 +37,8 @@ interface NftTankObject {
   speed?: number
   borrower?: string
   followers?: [string]
+
+  updatedAt?: Date
 }
 
 interface ClassesObject {
@@ -50,6 +52,7 @@ interface ClassesObject {
   speed?: number
   healthAdd?: number
   fireRateAdd?: number
+
   firePowerAdd?: number
   speedAdd?: number
   price?: number

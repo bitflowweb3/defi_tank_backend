@@ -37,6 +37,10 @@ const makeUserDB = (UserModel: mongoose.Model<any>) => {
       }
     },
 
+    findWinners: async ({ filter }: DataAccessParam) => {
+      return await UserModel.find(filter).sort({ merit: -1 }).limit(5)
+    },
+
     update: async ({ filter, update }: DataAccessParam) => {
       return UserModel.findOneAndUpdate(
         filter,
