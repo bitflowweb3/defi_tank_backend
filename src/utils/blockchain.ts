@@ -43,10 +43,10 @@ const toChecksumAddress = (address: string) => {
 			checksumAddress += parseInt(keccakHash[i], 16) >= 8 ? stripAddress[i]?.toUpperCase() : stripAddress[i];
 		}
 
-		return checksumAddress;
+		return checksumAddress.toUpperCase();
 	} catch (err) {
 		setlog("tochecksumaddress", err.message);
-		return address;
+		return address.toUpperCase();
 	}
 }
 

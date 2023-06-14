@@ -31,7 +31,9 @@ const platfromService = {
 
     //update level
     const newLevel = Math.floor(Math.sqrt((tank.experience) / 1000));
-    if (newLevel <= tank.tankLevel) return;
+    if (newLevel <= tank.tankLevel) {
+      return tank.tankLevel
+    }
 
     let speedAdd = tankClassType.speedAdd
     let healthAdd = tankClassType.healthAdd
@@ -59,7 +61,7 @@ const platfromService = {
       }
     })
 
-    return
+    return newLevel
   },
 
   updateTankEnergy: async (tankID: string) => {
@@ -84,7 +86,23 @@ const platfromService = {
     })
 
     return
-  }
+  },
+
+  addUserXp: () => {
+
+  },
+
+  addTankXp: () => {
+
+  },
+
+  addGuildXp: () => {
+
+  },
+
+  addItemXp: () => {
+
+  },
 }
 
 export default platfromService

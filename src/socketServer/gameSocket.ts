@@ -166,35 +166,49 @@ const GameLisnter = (io: any, userMiddleware: any) => {
 
     // add experience
     socket.on(securityCode['addExperience'], async (req) => {
-      // try {
-      //   const { socketID, nft_id, level } = decryptToJson(req.data);
-      //   if (!RoomManager.checkAddExp(socketID, level)) {
-      //     socket.emit(securityCode["error"], { data: encryptFromJson({ error: "critical error: detected cheat, your account will be closed." }) });
-      //     return;
-      //   }
+      try {
+        const { socketID, nft_id, level } = decryptToJson(req.data);
+        const user = global.users[socketID];
+        const exp = (level + 1) * 100;
 
-      //   let exp = (level + 1) * 100;
-      //   var user = global.users[socketID];
-      //   await UserController.update({ address: user.address }, { merit: Number(user.merit) + exp });
-      //   global.users[socketID] = await UserController.find({ address: user.address });
+        // if (!RoomManager.checkAddExp(socketID, level)) {
+        //   socket.emit(securityCode["error"], { data: encryptFromJson({ error: "critical error: detected cheat, your account will be closed." }) });
+        //   return
+        // }
 
-      //   await TanksController.upgrade({ id: nft_id }, { experience: exp });
-      //   await TanksController.updateLevel({ id: nft_id })
-      //   const UpdatedTank = await TanksController.find({ id: nft_id })
-      //   RoomManager.getRoom(socket.id).room.update
-      //   socket.emit(securityCode["update-tank"], {
-      //     data: encryptFromJson({
-      //       ...UpdatedTank._doc,
-      //       ownerNickName: user.name,
-      //       maxEnergy: Math.round(UpdatedTank.maxEnergy),
-      //       energyPool: Math.round(UpdatedTank.energyPool),
-      //       energy: Math.round(UpdatedTank.energy)
-      //     })
-      //   });
-      // } catch (err) {
-      //   console.log("game/api-socket/addExperience: ", err.message);
-      //   socket.emit(securityCode["error"], { data: encryptFromJson({ error: err.message }) });
-      // }
+        userDatas.UserDB.update({
+          filter: { address: user.address },
+          update: { merit: Number(user.merit) + exp },
+        })
+
+        global.users[socketID] = await userDatas.UserDB.findOne({
+          filter: { address: user.address }
+        })
+
+        await platformDatas.NftTankDB.update({
+          filter: { id: nft_id },
+          update: { $inc: { experience: exp } }
+        })
+
+        const tankLevel = await platfromService.updateTankLevel(nft_id)
+        const UpdatedTank = await platformDatas.NftTankDB.findOne({
+          filter: { id: nft_id }
+        })
+
+        // RoomManager.getRoom(socket.id).room.update
+        const resData = {
+          ...UpdatedTank._doc,
+          ownerNickName: user.name,
+          maxEnergy: Math.round(UpdatedTank.maxEnergy),
+          energyPool: Math.round(UpdatedTank.energyPool),
+          energy: Math.round(UpdatedTank.energy)
+        }
+
+        socket.emit(securityCode["update-tank"], { data: encryptFromJson(resData) })
+      } catch (err) {
+        console.log("game/api-socket/addExperience: ", err.message);
+        socket.emit(securityCode["error"], { data: encryptFromJson({ error: err.message }) });
+      }
     })
 
     // spawn tank
@@ -203,7 +217,6 @@ const GameLisnter = (io: any, userMiddleware: any) => {
         const { photonViewID, nft_id, gameMode } = decryptToJson(req.data);
         const user = global.users[socket.id];
         const userAddr = String(user.address).toUpperCase()
-
 
         const tank = await platformDatas.NftTankDB.findOne({
           filter: { id: nft_id, borrower: { userAddr } }
@@ -388,7 +401,7 @@ const GameLisnter = (io: any, userMiddleware: any) => {
       } catch (err) {
         socket.emit(securityCode["error"], { data: encryptFromJson({ error: err.message }) });
       }
-    });
+    })
   })
 }
 

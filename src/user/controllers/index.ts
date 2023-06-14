@@ -43,7 +43,7 @@ const userController = {
 			// service
 			if (!userService.verifySignature({ sig: signature, address })) {
 				throw new Error("invalid signature")
-			};
+			}
 
 			const existsMail = await userService.checkUpdateAccount({
 				name, email, address
@@ -51,7 +51,7 @@ const userController = {
 
 			if (existsMail.res === true) {
 				throw new Error(`${existsMail.param} is already exist!`);
-			};
+			}
 
 			const userData = await userDatas.UserDB.findOne({
 				filter: { address: tempAddress }
@@ -129,7 +129,7 @@ const userController = {
 				description: user.description,
 				links: user.links,
 				merit: user.merit,
-				follows: user.followers,
+				follows: user.followers.length,
 				ranking: ranking,
 			}
 
@@ -145,7 +145,7 @@ const userController = {
 			const { name, email, address } = req.body;
 
 			const existsMail = await userService.checkUpdateAccount({
-				name, email, address
+				name, email, address: address.toUpperCase()
 			})
 
 			let isValid = false
@@ -163,32 +163,33 @@ const userController = {
 	getUserData: async (req: any, res: Response) => {
 		try {
 			const { address } = req.body;
+			const tempAddr = address.toUpperCase()
 
 			const user = await userDatas.UserDB.findOne(({
-				filter: { address: address }
+				filter: { address: tempAddr }
 			}))
 
 			if (!user) {
 				const resData = {
 					name: "Player",
 					email: "",
-					address: address,
+					address: tempAddr,
 					image: "",
 					coverImage: "",
 					description: "",
 					links: [],
 					merit: 0,
-					follows: [],
+					follows: 0,
 					ranking: -1,
 				}
 
 				return res.json(resData)
 			} else {
 				let ranking = await userDatas.UserDB.findRank({
-					filter: { address: address }
+					filter: { address: tempAddr }
 				})
 
-				let borrowCount = await userService.updateBorrowTime(address)
+				let borrowCount = await userService.updateBorrowTime(tempAddr)
 
 				const resData = {
 					name: user.name,
@@ -199,7 +200,7 @@ const userController = {
 					description: user.description,
 					links: user.links,
 					merit: user.merit,
-					follows: user.followers,
+					follows: user.followers.length,
 					ranking: ranking,
 					role: user.role,
 					borrowCount: borrowCount
