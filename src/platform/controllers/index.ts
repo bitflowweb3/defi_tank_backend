@@ -11,7 +11,7 @@ const platfromController = {
     try {
       const { user } = req.body;
       const result = await platformDatas.NotifiDB.find({
-        filter: { user, status: "pending" }
+        filter: { user: user, status: "pending" }
       })
 
       return res.json(result)
@@ -67,10 +67,9 @@ const platfromController = {
   getUsertanks: async (req: any, res: Response) => {
     try {
       const { userAddress } = req.body;
-      const tempAddr = String(userAddress).toUpperCase()
 
       const tanks = await platformDatas.NftTankDB.find({
-        filter: { owner: tempAddr }
+        filter: { owner: userAddress }
       })
 
       res.status(200).json({ status: true, data: tanks });
@@ -102,7 +101,7 @@ const platfromController = {
       // const { availableLevel, signature } = updateInfo
       const updateInfo = await platformDatas.NftTankDB.getUpgradeSign({
         filter: { id: id }
-      });
+      })
 
       res.status(200).json({ status: true, data: updateInfo })
     } catch (err) {
@@ -124,7 +123,7 @@ const platfromController = {
         throw new Error("invalid tank id");
       }
 
-      if (tank.owner.toUpperCase() != address.toUpperCase()) {
+      if (tank.owner != address) {
         throw new Error("Permission Denied!")
       }
 
@@ -163,7 +162,7 @@ const platfromController = {
         filter: { id: id }
       })
 
-      if (address.toUpperCase() != tank.owner.toUpperCase()) {
+      if (address != tank.owner) {
         // user action - return borrowed tanks
         if (!tank || tank.borrower != "") {
           throw new Error("invalid tank id");
@@ -173,8 +172,8 @@ const platfromController = {
 
         let borrowTanks = await platformDatas.NftTankDB.find({
           filter: {
-            owner: { $ne: address.toUpperCase() },
-            borrower: address.toUpperCase()
+            owner: { $ne: address },
+            borrower: address
           }
         })
 
@@ -188,7 +187,7 @@ const platfromController = {
 
       await platformDatas.NftTankDB.update({
         filter: { id: tank.id },
-        update: { borrower: address.toUpperCase() }
+        update: { borrower: address }
       })
 
       const resData = await platformDatas.NftTankDB.findOne({
@@ -205,7 +204,6 @@ const platfromController = {
   lend: async (req: any, res: Response) => {
     try {
       const { id, to, signature } = req.body;
-      const lendAddr = to ? to.toUpperCase() : ""
       const address = await blockchainService.getAddrFromSig(id, signature)
 
       const tank = await platformDatas.NftTankDB.findOne({
@@ -216,14 +214,13 @@ const platfromController = {
         throw new Error("invalid tank id");
       }
       // only owner or borrower
-      if (tank.borrower.toUpperCase() != address.toUpperCase() && tank.owner.toUpperCase() != address.toUpperCase()) {
+      if (tank.borrower != address && tank.owner != address) {
         throw new Error("Permission denied");
       }
 
-
       await platformDatas.NftTankDB.update({
         filter: { id: id },
-        update: { borrower: lendAddr }
+        update: { borrower: to }
       })
 
       const resData = await platformDatas.NftTankDB.findOne({
@@ -251,7 +248,7 @@ const platfromController = {
       }
 
       let followerIndex = tank.followers.findIndex((follower: string) => (
-        follower == address.toUpperCase()
+        follower == address
       ))
 
       console.log("followerIndex", followerIndex);
@@ -259,7 +256,7 @@ const platfromController = {
       if (followerIndex != -1) {
         tank.followers.splice(followerIndex, 1); // unlike
       } else {
-        tank.followers = [...tank.followers, address.toUpperCase()]; // like
+        tank.followers = [...tank.followers, address]; // like
       }
 
       await platformDatas.NftTankDB.update({

@@ -145,7 +145,7 @@ const userController = {
 			const { name, email, address } = req.body;
 
 			const existsMail = await userService.checkUpdateAccount({
-				name, email, address: address.toUpperCase()
+				name, email, address: address
 			})
 
 			let isValid = false
@@ -163,17 +163,16 @@ const userController = {
 	getUserData: async (req: any, res: Response) => {
 		try {
 			const { address } = req.body;
-			const tempAddr = address.toUpperCase()
 
 			const user = await userDatas.UserDB.findOne(({
-				filter: { address: tempAddr }
+				filter: { address: address }
 			}))
 
 			if (!user) {
 				const resData = {
 					name: "Player",
 					email: "",
-					address: tempAddr,
+					address: address,
 					image: "",
 					coverImage: "",
 					description: "",
@@ -186,10 +185,10 @@ const userController = {
 				return res.json(resData)
 			} else {
 				let ranking = await userDatas.UserDB.findRank({
-					filter: { address: tempAddr }
+					filter: { address: address }
 				})
 
-				let borrowCount = await userService.updateBorrowTime(tempAddr)
+				let borrowCount = await userService.updateBorrowTime(address)
 
 				const resData = {
 					name: user.name,
@@ -302,7 +301,7 @@ const userController = {
 			const address = await blockchainService.getAddrFromSig(to, signature)
 
 			let user = await userDatas.UserDB.findOne({
-				filter: { address: to }
+				filter: { address: address }
 			})
 
 			if (!user) {
@@ -310,21 +309,21 @@ const userController = {
 			}
 
 			let followerIndex = user.followers.findIndex(
-				(follower) => follower == address.toUpperCase()
-			);
+				(follower) => follower == address
+			)
 
 			if (followerIndex != -1) {
 				// unlike
 				user.followers.splice(followerIndex, 1);
 			} else {
 				// like
-				user.followers = [...user.followers, address.toUpperCase()];
+				user.followers = [...user.followers, address];
 			}
 
 			await userDatas.UserDB.update({
-				filter: { address: to },
+				filter: { address: address },
 				update: { followers: user.followers }
-			});
+			})
 
 			return res.status(200).json({ status: true, data: user });
 		} catch (err) {

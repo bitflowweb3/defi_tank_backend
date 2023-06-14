@@ -68,16 +68,14 @@ const GameLisnter = (io: any, userMiddleware: any) => {
     socket.on(securityCode['getUsertanks'], async (req) => {
       try {
         const { socketId } = decryptToJson(req.data);
-        let sendDataList = [];
-
         const user = global.users[socketId];
-        const userAddr = String(user.address).toUpperCase()
+        let sendDataList = [];
 
         const checkTanks = await platformDatas.NftTankDB.find({
           filter: {
             $and: [
               { role: { $ne: 'ban' } },
-              { borrower: userAddr }
+              { borrower: user.address }
             ]
           }
         })
@@ -90,7 +88,7 @@ const GameLisnter = (io: any, userMiddleware: any) => {
           filter: {
             $and: [
               { role: { $ne: 'ban' } },
-              { borrower: userAddr }
+              { borrower: user.address }
             ]
           }
         })
@@ -118,16 +116,14 @@ const GameLisnter = (io: any, userMiddleware: any) => {
     socket.on(securityCode['getLendingtanks'], async (req) => {
       try {
         const { socketId } = decryptToJson(req.data);
-        let sendDataList = [];
-
         const user = global.users[socketId];
-        const userAddr = String(user.address).toUpperCase()
+        let sendDataList = [];
 
         const checkTanks = await platformDatas.NftTankDB.find({
           filter: {
             $and: [
               { role: { $ne: 'ban' } },
-              { borrower: userAddr }
+              { borrower: user.address }
             ]
           }
         })
@@ -140,7 +136,7 @@ const GameLisnter = (io: any, userMiddleware: any) => {
           filter: {
             $and: [
               { role: { $ne: 'ban' } },
-              { borrower: userAddr }
+              { borrower: user.address }
             ]
           }
         })
@@ -216,10 +212,9 @@ const GameLisnter = (io: any, userMiddleware: any) => {
       try {
         const { photonViewID, nft_id, gameMode } = decryptToJson(req.data);
         const user = global.users[socket.id];
-        const userAddr = String(user.address).toUpperCase()
 
         const tank = await platformDatas.NftTankDB.findOne({
-          filter: { id: nft_id, borrower: { userAddr } }
+          filter: { id: nft_id, borrower: user.address }
         })
 
         if (!tank) {
@@ -331,9 +326,7 @@ const GameLisnter = (io: any, userMiddleware: any) => {
           filter: { id: id }
         })
 
-
-
-        if (address.toUpperCase() != tank.owner.toUpperCase()) {
+        if (address != tank.owner) {
           // user action - return borrowed tanks
           if (!tank || tank.borrower != "") {
             throw new Error("invalid tank id");
@@ -342,8 +335,8 @@ const GameLisnter = (io: any, userMiddleware: any) => {
           await userService.newBorrow(address)
           let borrowTanks = await platformDatas.NftTankDB.find({
             filter: {
-              owner: { $ne: address.toUpperCase() },
-              borrower: address.toUpperCase()
+              owner: { $ne: address },
+              borrower: address
             }
           })
 
@@ -357,7 +350,7 @@ const GameLisnter = (io: any, userMiddleware: any) => {
 
         await platformDatas.NftTankDB.update({
           filter: { id: tank.id },
-          update: { borrower: address.toUpperCase() }
+          update: { borrower: address }
         })
 
         socket.emit(securityCode["rentTank-result"], { data: encryptFromJson(true) });
