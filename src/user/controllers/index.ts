@@ -92,7 +92,7 @@ const userController = {
 					throw new Error("image or coverImage not exists");
 				}
 
-				const referralCode = uuidv4()
+				const referralCode = userService.createReferralCode()
 				const [imgResult] = await ipfs.files.add(imageData);
 				const [coverImgResult] = await ipfs.files.add(coverImageData);
 				const coverImgUrl = config.ipfs.baseUrl + coverImgResult.hash

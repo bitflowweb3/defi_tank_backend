@@ -12,6 +12,7 @@ const userService = {
 	// auth service
 	createToken: AuthServices.createToken,
 	verifyToken: AuthServices.verifyToken,
+	createReferralCode: AuthServices.createReferralCode,
 
 	// check exist account
 	checkExistOfAccount: async ({ name, email, address }) => {

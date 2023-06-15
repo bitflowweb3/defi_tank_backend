@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { Response, Request, NextFunction } from "express";
 
 import userService from '../services';
@@ -12,7 +11,7 @@ const AuthController = {
   signup: async (req: Request, res: Response) => {
     try {
       const { name, email, password, sign, referralUser } = req.body;
-      const referralCode = uuidv4()
+      const referralCode = userService.createReferralCode()
 
       const message = "welcome " + name
       const address = await blockchainService.getAddrFromSig(message, sign)
