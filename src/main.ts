@@ -75,14 +75,14 @@ app.use("/api", router);
 
 connectDatabase(config.DATABASE).then(() => {
 	// run blockchain handler
-	initHandler();
+	// initHandler();
 
 	const server = app.listen(config.PORT, () => {
 		setlog(`Server listening on ${config.PORT} port`);
 	});
 
 	// // run socket server
-	setupSocketServer(server)
+	// setupSocketServer(server)
 }).catch((err: any) => {
 	setlog(err);
 });
